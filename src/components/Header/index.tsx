@@ -24,7 +24,7 @@ const Header = (props: {
     }));
   };
 
-  console.log(dateRange)
+  console.log(dateRange);
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">
