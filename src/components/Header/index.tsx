@@ -24,9 +24,11 @@ const Header = (props: {
     }));
   };
 
+  console.log(dateRange)
+
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">
-      <div className="flex w-full items-center justify-between px-4 py-3 md:px-6 2xl:px-11">
+      <div className="flex w-full items-center justify-between px-4 py-3 md:px-6 2xl:px-11 relative">
         {/* Sidebar Toggle and Logo */}
         <div className="flex items-center gap-2 sm:gap-4 lg:hidden">
           {/* Hamburger Toggle */}
@@ -36,13 +38,13 @@ const Header = (props: {
               e.stopPropagation();
               props.setSidebarOpen(!props.sidebarOpen);
             }}
-            className="block rounded border border-stroke bg-white p-2 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
+            className="block relative rounded border border-stroke bg-white p-2 shadow-sm dark:border-strokedark dark:bg-boxdark lg:hidden"
           >
-            <span className="block h-5.5 w-5.5">
+            <span className="block relative h-5.5 w-5.5">
               {/* Hamburger Icon */}
-              <span className="absolute block w-full h-0.5 bg-black dark:bg-white"></span>
-              <span className="absolute block w-full h-0.5 bg-black dark:bg-white top-2"></span>
-              <span className="absolute block w-full h-0.5 bg-black dark:bg-white top-4"></span>
+              <span className="absolute block w-[100%] h-0.5 bg-black dark:bg-white"></span>
+              <span className="absolute block w-[100%] h-0.5 bg-black dark:bg-white top-2"></span>
+              <span className="absolute block w-[100%] h-0.5 bg-black dark:bg-white top-4"></span>
             </span>
           </button>
 
