@@ -4,16 +4,26 @@ import Link from "next/link";
 import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { setEndDate, setStartDate } from "@/lib/features/propertySlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
 
-const Header = (props: {
+
+const Header= (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+
+  const getStartDate = useAppSelector((state) => state.date.startDate)
+  const getEndDate = useAppSelector((state) => state.date.endDate)
+
   const [dateRange, setDateRange] = useState({
-    startDate: "",
-    endDate: "",
+    startDate: getStartDate,
+    endDate: getEndDate,
   });
+
+
+  const dispatch = useAppDispatch()
 
   // Handle Date Change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +34,22 @@ const Header = (props: {
     }));
   };
 
-  console.log(dateRange);
+  const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate])
+  const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate])
+
+  useMemo(() => {
+    if (startDate) {
+      dispatch(setStartDate(startDate))
+    }
+  }
+    , [startDate, dispatch]
+  )
+
+  useMemo(() => {
+    if(endDate) {
+      dispatch(setEndDate(endDate))
+    }
+  }, [endDate, dispatch])
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">
@@ -70,7 +95,7 @@ const Header = (props: {
                 <input
                   type="date"
                   id="startDate"
-                  value={dateRange.startDate}
+                  value={startDate}
                   onChange={handleDateChange}
                   className="absolute top-0 left-0 h-full w-full opacity-0"
                 />
@@ -96,7 +121,7 @@ const Header = (props: {
               </div>
 
               {/* Full Input for Larger Screens */}
-              <div className="hidden lg:flex flex-col">
+              <div className="hidden lg:flex items-center">
                 <label
                   htmlFor="startDate"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 lg:mr-2"
@@ -106,7 +131,7 @@ const Header = (props: {
                 <input
                   type="date"
                   id="startDate"
-                  value={dateRange.startDate}
+                  value={startDate}
                   onChange={handleDateChange}
                   className="rounded border border-gray-300 p-2 dark:border-gray-700 dark:bg-boxdark dark:text-white"
                 />
@@ -120,7 +145,7 @@ const Header = (props: {
                 <input
                   type="date"
                   id="endDate"
-                  value={dateRange.endDate}
+                  value={endDate}
                   onChange={handleDateChange}
                   className="absolute top-0 left-0 h-full w-full opacity-0"
                 />
@@ -146,7 +171,7 @@ const Header = (props: {
               </div>
 
               {/* Full Input for Larger Screens */}
-              <div className="hidden lg:flex flex-col">
+              <div className="hidden lg:flex items-center">
                 <label
                   htmlFor="endDate"
                   className="text-sm font-medium text-gray-700 dark:text-gray-300 lg:mr-2"
@@ -156,7 +181,7 @@ const Header = (props: {
                 <input
                   type="date"
                   id="endDate"
-                  value={dateRange.endDate}
+                  value={endDate}
                   onChange={handleDateChange}
                   className="rounded border border-gray-300 p-2 dark:border-gray-700 dark:bg-boxdark dark:text-white"
                 />
@@ -208,3 +233,4 @@ const Header = (props: {
 };
 
 export default Header;
+

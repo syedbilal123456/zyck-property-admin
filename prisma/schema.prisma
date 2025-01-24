@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String          @id
+  firstName    String
+  lastName     String
+  email        String
+  avatarUrl    String?
+  createdAt    DateTime        @default(now())
+  isAdmin      Boolean
+  Property     Property[]
+  subscription Subscriptions[]
+}
+
+model Property {
+  id          Int                @id @default(autoincrement())
+  name        String
+  description String
+  price       Int
+  userId      String
+  typeId      Int
+  statusId    Int
+  DetailId    Int
+  createdAt   DateTime           @default(now())
+  contact     Contact?
+  typeDetail  PropertyTypeDetail @relation(fields: [DetailId], references: [id])
+  status      PropertyStatus     @relation(fields: [statusId], references: [id])
+  type        PropertyType       @relation(fields: [typeId], references: [id])
+  user        User               @relation(fields: [userId], references: [id])
+  feature     PropertyFeature?
+  images      PropertyImage[]
+  location    PropertyLocation?
+}
+
+model Contact {
+  id         Int      @id @default(autoincrement())
+  name       String
+  phone      String
+  email      String
+  propertyId Int      @unique
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model PropertyImage {
+  id         Int      @id @default(autoincrement())
+  url        String
+  propertyId Int
+  property   Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model PropertyFeature {
+  id              Int      @id @default(autoincrement())
+  bedrooms        Int
+  bathrooms       Int
+  parkingSpots    Int
+  area            Int
+  hasSwimmingPool Boolean
+  hasGardenYard   Boolean
+  hasBalcony      Boolean
+  propertyId      Int      @unique
+  property        Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+}
+
+model PropertyLocation {
+  id            Int      @id @default(autoincrement())
+  streetAddress String
+  propertyId    Int      @unique
+  cityId        Int
+  stateId       Int
+  city          City     @relation(fields: [cityId], references: [id])
+  property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  state         State    @relation(fields: [stateId], references: [id])
+}
+
+model State {
+  id               Int                @id @default(autoincrement())
+  value            String
+  cities           City[]
+  PropertyLocation PropertyLocation[]
+}
+
+model City {
+  id               Int                @id @default(autoincrement())
+  value            String
+  stateId          Int
+  state            State              @relation(fields: [stateId], references: [id])
+  PropertyLocation PropertyLocation[]
+}
+
+model PropertyType {
+  id       Int                  @id @default(autoincrement())
+  value    String
+  Property Property[]
+  Details  PropertyTypeDetail[]
+}
+
+model PropertyTypeDetail {
+  id             Int          @id @default(autoincrement())
+  value          String
+  propertyTypeId Int
+  Property       Property[]
+  propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
+}
+
+model PropertyStatus {
+  id       Int        @id @default(autoincrement())
+  value    String
+  Property Property[]
+}
+
+model SubscriptionPlan {
+  id                    Int             @id @default(autoincrement())
+  name                  String
+  price                 Float
+  propertyLimit         Int
+  ImagePerPropertyLimit Int
+  features              String
+  subscription          Subscriptions[]
+}
+
+model Subscriptions {
+  id        Int              @id @default(autoincrement())
+  paymentId String
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+  planId    Int
+  userId    String
+  plan      SubscriptionPlan @relation(fields: [planId], references: [id])
+  user      User             @relation(fields: [userId], references: [id])
+}
