@@ -74,6 +74,7 @@ model PropertyLocation {
   propertyId    Int      @unique
   cityId        Int
   stateId       Int
+  createdAt     DateTime @default(now())
   city          City     @relation(fields: [cityId], references: [id])
   property      Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
   state         State    @relation(fields: [stateId], references: [id])
@@ -82,6 +83,7 @@ model PropertyLocation {
 model State {
   id               Int                @id @default(autoincrement())
   value            String
+  createdAt        DateTime           @default(now())
   cities           City[]
   PropertyLocation PropertyLocation[]
 }
@@ -90,29 +92,33 @@ model City {
   id               Int                @id @default(autoincrement())
   value            String
   stateId          Int
+  createdAt        DateTime           @default(now())
   state            State              @relation(fields: [stateId], references: [id])
   PropertyLocation PropertyLocation[]
 }
 
 model PropertyType {
-  id       Int                  @id @default(autoincrement())
-  value    String
-  Property Property[]
-  Details  PropertyTypeDetail[]
+  id        Int                  @id @default(autoincrement())
+  value     String
+  createdAt DateTime             @default(now())
+  Property  Property[]
+  Details   PropertyTypeDetail[]
 }
 
 model PropertyTypeDetail {
   id             Int          @id @default(autoincrement())
   value          String
   propertyTypeId Int
+  createdAt      DateTime     @default(now())
   Property       Property[]
   propertyType   PropertyType @relation(fields: [propertyTypeId], references: [id])
 }
 
 model PropertyStatus {
-  id       Int        @id @default(autoincrement())
-  value    String
-  Property Property[]
+  id        Int        @id @default(autoincrement())
+  value     String
+  createdAt DateTime   @default(now())
+  Property  Property[]
 }
 
 model SubscriptionPlan {
@@ -122,6 +128,7 @@ model SubscriptionPlan {
   propertyLimit         Int
   ImagePerPropertyLimit Int
   features              String
+  createdAt             DateTime        @default(now())
   subscription          Subscriptions[]
 }
 

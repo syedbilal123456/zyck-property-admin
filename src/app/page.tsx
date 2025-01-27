@@ -5,18 +5,17 @@ import StoreProvider from "./storeProvider";
 
 export const metadata: Metadata = {
   title:
-    "Next.js E-commerce Dashboard | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Home for TailAdmin Dashboard Template",
+    "Zyck Property Dashborad",
+  description: "Zyck Property Dashborad",
 };
 
 export default function Home() {
   return (
     <>
-    <StoreProvider>
       <DefaultLayout>
         <ECommerce />
       </DefaultLayout>
-    </StoreProvider>
+
     </>
   );
 }
