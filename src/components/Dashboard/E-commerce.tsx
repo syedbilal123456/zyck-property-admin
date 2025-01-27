@@ -6,7 +6,6 @@ import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
-import { useAppDispatch } from "@/lib/hook";
 
 const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
   ssr: false,
@@ -23,7 +22,6 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
 
 const ECommerce: React.FC = () => {
 
- const dispatch = useAppDispatch()
 
   const [data, setData] = useState<Card>({users : 0, listings: 0})
   useEffect(() => {
