@@ -38,6 +38,28 @@ const Header= (props: {
     }));
   };
 
+// Get the current date
+const currentDate = new Date();
+
+// Format the current date as YYYY-MM-DD
+const formattedCurrentDate = currentDate.toISOString().split('T')[0];
+
+// Calculate the date one month ago
+const lastMonthDate = new Date(currentDate);
+lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
+
+// Handle cases where subtracting a month crosses into previous years
+if (lastMonthDate.getMonth() === 11 && currentDate.getMonth() === 0) {
+  lastMonthDate.setFullYear(currentDate.getFullYear() - 1);
+}
+
+// Format the last month's date as YYYY-MM-DD
+const formattedLastMonthDate = lastMonthDate.toISOString().split('T')[0];
+
+console.log("Current Date:", formattedCurrentDate);
+console.log("Last Month Date:", formattedLastMonthDate);
+
+
   const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate])
   const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate])
 
