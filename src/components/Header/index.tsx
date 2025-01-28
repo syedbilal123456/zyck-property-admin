@@ -40,13 +40,13 @@ const Header= (props: {
 
   const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate])
   const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate])
-const da = '2025-01-01'
-dispatch(setDates({ startDate: startDate, endDate: endDate }));
+
+  dispatch(setDates({ startDate: startDate, endDate: endDate }));
 
 console.log(startDate,endDate);
 
 const data =  useSelector((state:RootState) => state.date)
-console.log(data);
+console.log(data,"datea");
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">
