@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
+
 // All listings and users available in website
 export async function GET(request: Request) {
     try {

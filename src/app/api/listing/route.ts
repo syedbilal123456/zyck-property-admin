@@ -1,6 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+// Explicitly opt-out of static rendering
+export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
+
 export async function GET(request: Request) {
     try {
         const url = new URL(request.url);
