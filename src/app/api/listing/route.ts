@@ -1,7 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+
+// Explicitly opt-out of static rendering
 export const dynamic = 'force-dynamic';
+
 
 export async function GET(request: Request) {
     try {

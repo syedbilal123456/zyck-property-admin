@@ -1,8 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
-export const dynamic = 'force-dynamic';
 
-// All listings and users available in website
+export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
+
 export async function GET(request: Request) {
     try {
         // Get query parameters from the request
@@ -19,25 +19,38 @@ export async function GET(request: Request) {
         const startDate = new Date(year, month, 1); // First day of the month
         const endDate = new Date(year, month + 1, 1); // First day of the next month
 
-        // Query for properties added within the specified month and year based on createdAt field
-        const province = await prisma.propertyLocation.findMany({
+        // Query for properties with their locations
+        const locations = await prisma.propertyLocation.findMany({
             where: {
-                createdAt: {
-                    gte: startDate, // Greater than or equal to the start of the month
-                    lt: endDate,    // Less than the start of the next month
-                },
+                property: {
+                    createdAt: {
+                        gte: startDate,
+                        lt: endDate,
+                    }
+                }
             },
+            include: {
+                state: true,
+                city: true,
+                property: {
+                    select: {
+                        id: true,
+                        name: true,
+                        createdAt: true
+                    }
+                }
+            }
         });
 
-        // If no properties found, return a 400 response
-        if (!province || province.length === 0) {
-            return new NextResponse("No properties found for the specified month and year", { status: 400 });
+        // If no locations found, return a 404 response
+        if (!locations || locations.length === 0) {
+            return new NextResponse("No properties found for the specified month and year", { status: 404 });
         }
 
-        // Return the properties
-        return NextResponse.json({ province });
+        // Return the locations with their related data
+        return NextResponse.json({ locations });
     } catch (error) {
-        // Return a 500 error if something goes wrong
+        console.error(error); // Log the error for debugging
         return new NextResponse("An error occurred while fetching properties", { status: 500 });
     }
 }

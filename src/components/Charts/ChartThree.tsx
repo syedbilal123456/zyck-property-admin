@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 interface Province {
   id: number;
@@ -35,12 +37,9 @@ const ChartThree: React.FC = () => {
   const [labels, setLabels] = useState<string[]>([]);
   
 
-  
   useEffect(() => {
     
     const fetchData = async () => {
-
-
 
       try {
         const response = await fetch(`/api/provinces?month=0&year=2025`);
