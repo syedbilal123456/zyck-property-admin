@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
+export const dynamic = 'force-dynamic';
 
 // Explicitly opt-out of static rendering
 export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
