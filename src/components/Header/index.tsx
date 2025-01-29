@@ -6,7 +6,9 @@ import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 import { useMemo, useState } from "react";
 import { setEndDate, setStartDate } from "@/lib/features/propertySlice";
-import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import { useDispatch, useSelector } from "react-redux";
+import { setDates } from "@/lib/redux/reducer/dateSlice";
+import { RootState } from "@/lib/redux/store";
 
 
 const Header= (props: {
@@ -14,16 +16,18 @@ const Header= (props: {
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
 
-  const getStartDate = useAppSelector((state) => state.date.startDate)
-  const getEndDate = useAppSelector((state) => state.date.endDate)
+
 
   const [dateRange, setDateRange] = useState({
-    startDate: getStartDate,
-    endDate: getEndDate,
+    startDate: "",
+    endDate: "",
   });
 
+  console.log(dateRange,"dartrange");
+  
 
-  const dispatch = useAppDispatch()
+
+  const dispatch = useDispatch()
 
   // Handle Date Change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,19 +41,12 @@ const Header= (props: {
   const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate])
   const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate])
 
-  useMemo(() => {
-    if (startDate) {
-      dispatch(setStartDate(startDate))
-    }
-  }
-    , [startDate, dispatch]
-  )
+  dispatch(setDates({ startDate: startDate, endDate: endDate }));
 
-  useMemo(() => {
-    if(endDate) {
-      dispatch(setEndDate(endDate))
-    }
-  }, [endDate, dispatch])
+console.log(startDate,endDate);
+
+const data =  useSelector((state:RootState) => state.date)
+console.log(data,"datea");
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">

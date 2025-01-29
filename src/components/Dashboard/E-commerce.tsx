@@ -6,7 +6,8 @@ import ChartTwo from "../Charts/ChartTwo";
 import ChatCard from "../Chat/ChatCard";
 import TableOne from "../Tables/TableOne";
 import CardDataStats from "../CardDataStats";
-import { useAppDispatch } from "@/lib/hook";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 const MapOne = dynamic(() => import("@/components/Maps/MapOne"), {
   ssr: false,
@@ -23,13 +24,16 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
 
 const ECommerce: React.FC = () => {
 
- const dispatch = useAppDispatch()
+
+  const date  =  useSelector((state:RootState) => state.date)
+
+    
 
   const [data, setData] = useState<Card>({users : 0, listings: 0})
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/api/listing')
+        const response = await fetch(`/api/listing?startDate=${date.startDate}&endDate=${date.endDate}`)
         if (!response.ok) {
           throw new Error('Error Response')
         }
@@ -41,7 +45,7 @@ const ECommerce: React.FC = () => {
       }
     }
     fetchData()
-  }, [])
+  }, [date])
 
   const { listings, users } = data || { listings: 0, users: 0 };
   console.log("listings ===============>",listings)
