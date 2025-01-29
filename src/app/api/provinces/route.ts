@@ -1,10 +1,8 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
-
 export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
 
-// All listings and users available in website
 export async function GET(request: Request) {
     try {
         // Get query parameters from the request
@@ -39,7 +37,7 @@ export async function GET(request: Request) {
         // Return the properties
         return NextResponse.json({ province });
     } catch (error) {
-        // Return a 500 error if something goes wrong
+        console.error(error); // Log the error for debugging
         return new NextResponse("An error occurred while fetching properties", { status: 500 });
     }
 }
