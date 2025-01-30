@@ -1,8 +1,10 @@
 import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
+
 // Explicitly opt-out of static rendering
-export const dynamic = 'force-dynamic'; // This ensures the route is dynamic
+export const dynamic = 'force-dynamic';
+
 
 export async function GET(request: Request) {
     try {
@@ -10,6 +12,7 @@ export async function GET(request: Request) {
         const startDate = url.searchParams.get("startDate"); // Example: "2025-01-01"
         const endDate = url.searchParams.get("endDate");   // Example: "2025-01-28"
 
+        // Check if both startDate and endDate are provided
         if (!startDate || !endDate) {
             return new NextResponse("Missing startDate or endDate query parameters", { status: 400 });
         }
@@ -18,6 +21,7 @@ export async function GET(request: Request) {
         const start = new Date(startDate);
         const end = new Date(endDate);
 
+        // Validate the date format
         if (isNaN(start.getTime()) || isNaN(end.getTime())) {
             return new NextResponse("Invalid date format", { status: 400 });
         }
@@ -30,7 +34,7 @@ export async function GET(request: Request) {
                     lte: end,
                 },
             },
-        })
+        });
 
         // Filter users based on the date range (if required)
         const users = await prisma.user.count({
@@ -42,10 +46,12 @@ export async function GET(request: Request) {
             },
         });
 
-        if (!listings && !users) {
+        // Check if no data is found
+        if (listings === 0 && users === 0) {
             return new NextResponse("No data found within the specified date range", { status: 404 });
         }
 
+        // Return the counts as a JSON response
         return NextResponse.json({ users, listings });
     } catch (error) {
         console.error(error);
