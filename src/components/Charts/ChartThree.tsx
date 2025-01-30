@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
+import { set } from "zod";
 
 interface Province {
   id: number;
@@ -35,11 +34,40 @@ const ChartThree: React.FC = () => {
   const [provinceCounts, setProvinceCounts] = useState<ProvinceCount>({});
   const [series, setSeries] = useState<number[]>([]);
   const [labels, setLabels] = useState<string[]>([]);
-  
+  const [date, setDate] = useState([{ startDate: "", endDate: "" }]);
+
+  const getDefaultDateRange = (): { startDate: string; endDate: string } => {
+    const now = new Date();
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    
+    const startDate = firstDay.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    const endDate = now.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+
+    return { startDate, endDate };
+  };
+
+  useEffect(() => {
+    setDate([getDefaultDateRange()]);
+  }, []); // Runs only once when the component mounts
+
+  useEffect(() => {
+    console.log(date, "date =================================="); // This will log the updated date state
+  }, [date]); // Logs whenever date state updates
 
   useEffect(() => {
     
     const fetchData = async () => {
+
+
 
       try {
         const response = await fetch(`/api/provinces?month=0&year=2025`);

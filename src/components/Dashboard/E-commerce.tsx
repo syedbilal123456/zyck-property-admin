@@ -24,11 +24,7 @@ const ChartThree = dynamic(() => import("@/components/Charts/ChartThree"), {
 
 const ECommerce: React.FC = () => {
 
-
-  
-  const date  =  useSelector((state:RootState) => state.date)
-
-    
+  const date =  useSelector((state:RootState) => state.date)
 
   const [data, setData] = useState<Card>({users : 0, listings: 0})
   useEffect(() => {
@@ -77,7 +73,7 @@ const ECommerce: React.FC = () => {
         </CardDataStats>
         <CardDataStats title="Total User" total={users.toString()} rate="2.59%" levelUp>
           <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
-            version="1.1" x="0px" y="2px" viewBox="0 0 100 125" className="enable-background:new 0 0 100 100; fill-green-400 dark:fill-green-300"
+            version="1.1" x="0px" y="2px" viewBox="0 0 100 125" enableBackground = "new 0 0 100 100" className=" fill-green-400 dark:fill-green-300"
             xmlSpace="preserve"
             height={32}
             width={40}>
@@ -86,7 +82,7 @@ const ECommerce: React.FC = () => {
         </CardDataStats>
         <CardDataStats title="Total Showings" total="0" rate="0.95%" levelDown>
           <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink"
-            version="1.1" x="0px" y="0px" viewBox="0 0 100 125" enable-background="new 0 0 100 100"
+            version="1.1" x="0px" y="0px" viewBox="0 0 100 125" enableBackground="new 0 0 100 100"
             xmlSpace="preserve"
             className="fill-green-400 dark:fill-green-300"
             width={40}

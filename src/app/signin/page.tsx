@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Mail} from 'lucide-react'
 import { signIn } from 'next-auth/react'
+import { toast } from 'react-toastify'
 
 const loginSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -40,14 +41,16 @@ export default function LoginPage() {
       })
       
       if (result?.error) {
+        toast.error('Invalid email')
         setError('Invalid email')
         
         return
       }
-      
+      toast.success('Logged in successfully')
       router.push('/') // Redirect to dashboard after successful login
     } catch (error) {
       setError('Failed to log in. Please check your credentials.')
+      toast.error('Failed to log in. Please check your credentials.')
     }
   }
 
