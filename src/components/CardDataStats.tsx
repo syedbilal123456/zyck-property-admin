@@ -1,4 +1,7 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
+import Model from "./Model";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/redux/store";
 
 interface CardDataStatsProps {
   title: string;
@@ -7,20 +10,107 @@ interface CardDataStatsProps {
   levelUp?: boolean;
   levelDown?: boolean;
   children: ReactNode;
+  view?: boolean;
+  userDetails: [];
+}
+
+interface CardUser {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  createdAt: string;
+  name: string;
+  city: string;
+  state: string;
+  properties: string;
 }
 
 const CardDataStats: React.FC<CardDataStatsProps> = ({
   title,
+  view,
   total,
   rate,
   levelUp,
   levelDown,
   children,
 }) => {
+
+   // Modal state
+    const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => setIsModalOpen((prev) => !prev); // Toggle modal open/close
+
+
+  // Redux State for Date
+  const date = useSelector((state: RootState) => state.date);
+
+  const [data, setData] = useState<{ usersDetails: CardUser[] }>({
+        usersDetails: [],
+      });
+
+  // User Data State
+  // const [usersDetails, setUsersDetails] = useState<User[]>([]);
+
+  // Fetch Users Only When Date Changes
+  useEffect(() => {
+    if (!date?.startDate || !date?.endDate) return; // Ensure date is available
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/listing?startDate=${date.startDate}&endDate=${date.endDate}`);
+        if (!response.ok) {
+          throw new Error("Error Response");
+        }
+        const result = await response.json();
+        console.log("Fetched Data:", result);
+
+        // Ensure the API response contains `usersDetails`
+        const usersDetails: CardUser[] = result?.usersDetails.map((user: any) => ({
+          id: user.id,
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          createdAt: user.createdAt,
+          name: user.firstName || '',
+          city: user.city || '',
+          state: user.state || '',
+          properties: user.properties || []
+        })) || [];
+        setData({ usersDetails });
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+
+    fetchData();
+  }, [date]);
+
+  // const { usersDetails } = data;
+
+  // console.log("usersDetails *********>", usersDetails);
+  console.log("data", data);
+
+  if (!data) return <div>Loading...</div>;
   return (
     <div className="rounded-sm border border-stroke bg-white px-7.5 py-6 shadow-default dark:border-strokedark dark:bg-boxdark">
-      <div className="flex h-11.5 w-11.5 items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4">
-        {children}
+      <div className={`flex h-12.5 w-full items-center justify-between ${view &&  " !w-full " }   `}>
+       <div className=" items-center justify-center rounded-full bg-meta-2 dark:bg-meta-4"> {children}</div>
+        {view && 
+          <span className="text-sm font-medium">
+            {/* View Users Button */}
+        <button
+          onClick={toggleModal}
+          className="text-green-500 hover:underline p-2 rounded-md"
+          >
+          View Users
+        </button>
+        {/* Modal Component */}
+        <Model
+          isOpen={isModalOpen}
+          onClose={toggleModal} // Close modal on clicking close button
+          usersDetails={data?.usersDetails || []}
+          />
+          </span>}
       </div>
 
       <div className="mt-4 flex items-end justify-between">
@@ -29,6 +119,7 @@ const CardDataStats: React.FC<CardDataStatsProps> = ({
             {total}
           </h4>
           <span className="text-sm font-medium">{title}</span>
+         
         </div>
 
         <span
