@@ -46,10 +46,6 @@ export async function GET(request: Request) {
             },
         });
 
-        // Check if no data is found
-        if (listings === 0 && users === 0) {
-            return new NextResponse("No data found within the specified date range", { status: 404 });
-        }
 
         // Return the counts as a JSON response
         return NextResponse.json({ users, listings });

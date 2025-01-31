@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
-import { set } from "zod";
 
 interface Province {
   id: number;

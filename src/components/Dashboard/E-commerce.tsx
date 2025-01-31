@@ -52,7 +52,7 @@ const ECommerce: React.FC = () => {
   return (
     <>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
-        <CardDataStats title="Total listings" total={listings.toString()} rate="0.43%" levelUp>
+        <CardDataStats title="Total Properties" total={listings.toString()} rate="0.43%" levelUp>
           <svg className="fill-green-400 dark:fill-green-300"
             width="40"
             height="32"

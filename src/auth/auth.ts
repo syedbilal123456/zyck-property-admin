@@ -13,12 +13,14 @@ declare module "next-auth" {
       username: string;
       email: string;
       isAdmin: boolean;
+      image: string
     };
   }
   interface User {
     email: string;
     isAdmin: boolean;
     name: string;
+    image: string | null
   }
 }
 
@@ -46,12 +48,22 @@ export const NEXT_AUTH: NextAuthOptions = {
 
         const { email } = credentials;
         
+
+
         // Fetch the user from the database (ensure they are an admin)
         const existingUser = await db.user.findFirst({
           where: {
             email: email,
             isAdmin: true, // Ensure only admins can sign in
           },
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            isAdmin: true,
+            avatarUrl: true          
+          }
         });
 
         if (!existingUser) {
@@ -64,6 +76,7 @@ export const NEXT_AUTH: NextAuthOptions = {
           name: `${existingUser.firstName} ${existingUser.lastName}`,
           email: existingUser.email,
           isAdmin: existingUser.isAdmin,
+          image: existingUser.avatarUrl
         };
       },
     }),
@@ -76,6 +89,7 @@ export const NEXT_AUTH: NextAuthOptions = {
         token.name = user.name;
         token.email = user.email;
         token.isAdmin = user.isAdmin;
+        token.picture = user.image;
       }
       return token;
     },
@@ -85,6 +99,7 @@ export const NEXT_AUTH: NextAuthOptions = {
         session.user.username = token.name as string;
         session.user.email = token.email as string;
         session.user.isAdmin = token.isAdmin as boolean;
+        session.user.image = token.picture as string
       }
       console.log("Updated Session:", session); // For debugging, you can remove this later
       return session;
