@@ -5,29 +5,38 @@ import DarkModeSwitcher from "./DarkModeSwitcher";
 import DropdownUser from "./DropdownUser";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { setEndDate, setStartDate } from "@/lib/features/propertySlice";
 import { useDispatch, useSelector } from "react-redux";
 import { setDates } from "@/lib/redux/reducer/dateSlice";
 import { RootState } from "@/lib/redux/store";
 
-
-const Header= (props: {
+const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+  const logDefaultDateRange = () => {
+    const now = new Date();
 
+    // Get the first day of the current month
+    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+    const defaultStartDate = firstDay.toISOString().split('T')[0]; // Ensure format YYYY-MM-DD
 
+    // Get today's date as the end date
+    const defaultEndDate = now.toISOString().split('T')[0]; // Ensure format YYYY-MM-DD
+
+    return { defaultEndDate, defaultStartDate };
+  };
+
+  const { defaultEndDate, defaultStartDate } = logDefaultDateRange();
+
+  const getStartDate = useSelector((state: RootState) => state.date.startDate);
+  const getEndDate = useSelector((state: RootState) => state.date.endDate);
 
   const [dateRange, setDateRange] = useState({
-    startDate: "",
-    endDate: "",
+    startDate: getStartDate || defaultStartDate, // Use the default if no value from Redux
+    endDate: getEndDate || defaultEndDate,     // Use the default if no value from Redux
   });
 
-  console.log(dateRange,"dartrange");
-  
-
-
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   // Handle Date Change
   const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,37 +47,10 @@ const Header= (props: {
     }));
   };
 
-// Get the current date
-const currentDate = new Date();
+  const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate]);
+  const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate]);
 
-// Format the current date as YYYY-MM-DD
-const formattedCurrentDate = currentDate.toISOString().split('T')[0];
-
-// Calculate the date one month ago
-const lastMonthDate = new Date(currentDate);
-lastMonthDate.setMonth(lastMonthDate.getMonth() - 1);
-
-// Handle cases where subtracting a month crosses into previous years
-if (lastMonthDate.getMonth() === 11 && currentDate.getMonth() === 0) {
-  lastMonthDate.setFullYear(currentDate.getFullYear() - 1);
-}
-
-// Format the last month's date as YYYY-MM-DD
-const formattedLastMonthDate = lastMonthDate.toISOString().split('T')[0];
-
-console.log("Current Date:", formattedCurrentDate);
-console.log("Last Month Date:", formattedLastMonthDate);
-
-
-  const startDate = useMemo(() => dateRange.startDate, [dateRange.startDate])
-  const endDate = useMemo(() => dateRange.endDate, [dateRange.endDate])
-
-  dispatch(setDates({ startDate: startDate, endDate: endDate }));
-
-console.log(startDate,endDate);
-
-const data =  useSelector((state:RootState) => state.date)
-console.log(data,"datea");
+  dispatch(setDates({ startDate, endDate }));
 
   return (
     <header className="sticky top-0 z-50 flex w-full bg-white shadow-md dark:bg-boxdark overflow-hidden">
@@ -238,12 +220,8 @@ console.log(data,"datea");
         </div>
 
         {/* User and Dark Mode Switcher */}
-        <div className="flex items-center gap-3 2xsm:gap-7 mr-4">
-          <ul className="flex items-center gap-2 2xsm:gap-4">
-            {/* Dark Mode Toggler */}
-            <DarkModeSwitcher />
-          </ul>
-          {/* User Dropdown */}
+        <div className="flex items-center gap-3 2xsm:gap-7 mr-2">
+          <DarkModeSwitcher />
           <DropdownUser />
         </div>
       </div>
@@ -252,4 +230,3 @@ console.log(data,"datea");
 };
 
 export default Header;
-

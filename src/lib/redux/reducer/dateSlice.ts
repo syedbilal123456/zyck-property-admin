@@ -13,6 +13,7 @@ interface DateDetails {
   endYear: number | null;
 }
 
+
 const initialState: DateDetails = {
   startDate: "",
   endDate: "",

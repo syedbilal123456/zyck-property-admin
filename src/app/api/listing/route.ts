@@ -46,13 +46,27 @@ export async function GET(request: Request) {
             },
         });
 
-        // Check if no data is found
-        if (listings === 0 && users === 0) {
-            return new NextResponse("No data found within the specified date range", { status: 404 });
-        }
+        // Get user details
+        const usersDetails = await prisma.user.findMany({
+            where: {
+                createdAt: {
+                    gte: start,
+                    lte: end,
+                },
+            },
+            select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                createdAt: true,
+            },
+        });
+
+
 
         // Return the counts as a JSON response
-        return NextResponse.json({ users, listings });
+        return NextResponse.json({ users, listings, usersDetails });
     } catch (error) {
         console.error(error);
         return new NextResponse("An Error Occurred", { status: 500 });
