@@ -27,7 +27,7 @@ const greenIcon = L.icon({
 
 const PakistanMap = () => {
   return (
-    <div className="w-full h-[500px]"> {/* Fixed height container */}
+    <div className="relative z-20 w-full h-[500px]"> {/* Fixed height container */}
       <MapContainer
         center={pakistanCenter}
         zoom={zoomLevel}
