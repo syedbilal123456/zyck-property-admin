@@ -104,7 +104,7 @@ const PropertyTable: React.FC<PropertyTableProps> = ({ userProperties = [] }) =>
     onClick: () => void
   }> = ({ description, isExpanded, onClick }) => (
     <div className="relative">
-      <div className={`text-sm text-gray-200 ${!isExpanded ? "line-clamp-3" : ""}`}>{description}</div>
+      <div className={`text-sm text-green-200 ${!isExpanded ? "line-clamp-3" : ""}`}>{description}</div>
       {description.length > 150 && (
         <button onClick={onClick} className="text-blue-400 hover:text-blue-300 text-sm mt-1 font-medium">
           {isExpanded ? "Show Less" : "Show More"}
@@ -134,11 +134,11 @@ const PropertyTable: React.FC<PropertyTableProps> = ({ userProperties = [] }) =>
   const userProepertyArray = Object.values(userProperties)
 
   if (!Array.isArray(userProepertyArray)) {
-  return <div className="text-center text-gray-500 py-8">No properties found.</div>
+  return <div className="text-center text-green-500 py-8">No properties found.</div>
  }
 
 if ( userProepertyArray.length === 0) {
-    return <div className="text-center text-gray-500 py-8">No found.</div>
+    return <div className="text-center text-green-500 py-8">No found.</div>
   }
 
   return (
@@ -146,7 +146,7 @@ if ( userProepertyArray.length === 0) {
       <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
-            <tr className="bg-gray-800 text-gray-200">
+            <tr className="bg-green-800 text-green-200">
               <th className="p-4 text-left">Images</th>
               <th className="p-4 text-left">Location</th>
               <th className="p-4 text-left">Price</th>
@@ -158,24 +158,24 @@ if ( userProepertyArray.length === 0) {
           </thead>
           <tbody>
             {userProperties?.map((property) => (
-              <tr key={property.id} className="border-b border-gray-700 hover:bg-gray-800/50 transition-colors">
+              <tr key={property.id} className="border-b border-green-700 hover:bg-green-800/50 transition-colors">
                 <td className="p-4">
                   <ImageCell images={property.images} />
                 </td>
                 <td className="p-4">
                   <div className="space-y-1">
-                    <div className="font-medium text-gray-200">
+                    <div className="font-medium text-green-200">
                       {property.location.city.value}, {property.location.state.value}
                     </div>
-                    <div className="text-sm text-gray-400">{property.location.streetAddress}</div>
+                    <div className="text-sm text-green-400">{property.location.streetAddress}</div>
                   </div>
                 </td>
-                <td className="p-4 text-gray-200">{formatPrice(property.price)}</td>
+                <td className="p-4 text-green-200">{formatPrice(property.price)}</td>
                 <td className="p-4">
                   <div className="space-y-1">
-                    <div className="font-medium text-gray-200">{property.contact.name}</div>
-                    <div className="text-sm text-gray-400">{property.contact.email}</div>
-                    <div className="text-sm text-gray-400">{property.contact.phone}</div>
+                    <div className="font-medium text-green-200">{property.contact.name}</div>
+                    <div className="text-sm text-green-400">{property.contact.email}</div>
+                    <div className="text-sm text-green-400">{property.contact.phone}</div>
                   </div>
                 </td>
                 <td className="p-4">
@@ -185,8 +185,8 @@ if ( userProepertyArray.length === 0) {
                     onClick={() => toggleDescription(property.id)}
                   />
                 </td>
-                <td className="p-4 text-gray-200">{formatDate(property.createdAt)}</td>
-                <td className="gap-3 p-4 text-gray-200">
+                <td className="p-4 text-green-200">{formatDate(property.createdAt)}</td>
+                <td className="gap-3 p-4 text-green-200">
                   <button onClick={() => deletePropertybyId(property.id)}>
                     <Trash2 />
                   </button>
@@ -215,7 +215,7 @@ if ( userProepertyArray.length === 0) {
             />
             <button
               onClick={() => setSelectedImage(null)}
-              className="absolute top-4 right-4 text-white hover:text-gray-300"
+              className="absolute top-4 right-4 text-white hover:text-green-300"
             >
               Close
             </button>

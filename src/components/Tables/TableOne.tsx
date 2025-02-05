@@ -196,22 +196,22 @@ const TableOne = () => {
               <div className="w-1/3">
                 <Image alt={item.firstName} src={item.avatarUrl ?? "/default-avatar.png"} width={300} height={400}/>
               </div>
-              <p className="text-black dark:text-white">{item.firstName + " " + item.lastName}</p>
+              <p className="text-green-500 dark:text-green-400">{item.firstName + " " + item.lastName}</p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{item.city}</p>
+              <p className="text-green-500 dark:text-green-400">{item.city}</p>
             </div>
             <div className="flex mx-7 items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{item.email}</p>
+              <p className="text-green-500 dark:text-green-400">{item.email}</p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{item.province}</p>
+              <p className="text-green-500 dark:text-green-400">{item.province}</p>
             </div>
             <div className="flex items-center justify-center p-2.5 xl:p-5">
-              <p className="text-black dark:text-white">{item.phoneNumber}</p>
+              <p className="text-green-500 dark:text-green-400">{item.phoneNumber}</p>
             </div>
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
-              <p className="text-black dark:text-white">{item.streetAddress}</p>
+              <p className="text-green-500 dark:text-green-400">{item.streetAddress}</p>
             </div>
 
             <div className="hidden items-center justify-center p-2.5 sm:flex xl:p-5">
