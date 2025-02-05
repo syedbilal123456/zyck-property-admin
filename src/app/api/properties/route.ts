@@ -31,7 +31,7 @@ export async function GET(request : Request){
             }
         });
 
-        return NextResponse.json({ userProeperties })
+        return NextResponse.json( userProeperties )
     } catch (error) {
         return new NextResponse("An Error Occurred", { status: 500 })
     }

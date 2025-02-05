@@ -47,7 +47,6 @@ export async function DELETE(request: Request) {
             return new NextResponse("Missing id query parameter", { status: 400 });
         }
 
-
         const deleteUser = await prisma.user.delete({where: {id : id}});
 
         console.log(deleteUser)
