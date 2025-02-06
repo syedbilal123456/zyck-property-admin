@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk } from "@reduxjs/toolkit";
 
 interface DateDetails {
   startDate: string;
@@ -11,8 +11,45 @@ interface DateDetails {
   endWeek: number | null;
   endMonth: number | null;
   endYear: number | null;
+  provinces: Province[];
+  provinceCounts: { [key: string]: number };
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
+  error: string | null;
 }
 
+interface Province {
+  id: number;
+  stateId: number;
+}
+
+const provinceNames: { [key: number]: string } = {
+  1: "Sindh",
+  2: "Punjab", 
+  3: "Balochistan", 
+  4: "KPK", 
+  5: "Gilgit-Baltistan"
+};
+
+export const fetchProvinceData = createAsyncThunk(
+  'date/fetchProvinceData',
+  async ({ month, year }: { month: number; year: number }) => {
+    const response = await fetch(`/api/provinces?month=${month}&year=${year}`);
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch provinces');
+    }
+
+    const result = await response.json();
+    
+    const provinceCounts = result.province.reduce((acc: { [key: string]: number }, item: Province) => {
+      const provinceName = provinceNames[item.stateId] || `Unknown (${item.stateId})`;
+      acc[provinceName] = (acc[provinceName] || 0) + 1;
+      return acc;
+    }, {});
+
+    return { provinces: result.province, provinceCounts };
+  }
+);
 
 const initialState: DateDetails = {
   startDate: "",
@@ -25,6 +62,10 @@ const initialState: DateDetails = {
   endWeek: null,
   endMonth: null,
   endYear: null,
+  provinces: [],
+  provinceCounts: {},
+  status: 'idle',
+  error: null
 };
 
 const dateSlice = createSlice({
@@ -34,37 +75,40 @@ const dateSlice = createSlice({
     setDates: (state, action: PayloadAction<{ startDate: string; endDate: string }>) => {
       const { startDate, endDate } = action.payload;
 
-      // Set the provided startDate and endDate
       state.startDate = startDate;
       state.endDate = endDate;
 
-      // Calculate and set additional date details for the startDate
       const start = new Date(startDate);
       state.startDay = start.getDate();
       state.startWeek = Math.ceil(start.getDate() / 7);
-      state.startMonth = start.getMonth() + 1; // Month is 0-indexed
+      state.startMonth = start.getMonth() + 1;
       state.startYear = start.getFullYear();
 
-      // Calculate and set additional date details for the endDate
       const end = new Date(endDate);
       state.endDay = end.getDate();
       state.endWeek = Math.ceil(end.getDate() / 7);
-      state.endMonth = end.getMonth() + 1; // Month is 0-indexed
+      state.endMonth = end.getMonth() + 1;
       state.endYear = end.getFullYear();
     },
     resetDates: (state) => {
-      state.startDate = "";
-      state.endDate = "";
-      state.startDay = null;
-      state.startWeek = null;
-      state.startMonth = null;
-      state.startYear = null;
-      state.endDay = null;
-      state.endWeek = null;
-      state.endMonth = null;
-      state.endYear = null;
-    },
+      Object.assign(state, initialState);
+    }
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchProvinceData.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchProvinceData.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.provinces = action.payload.provinces;
+        state.provinceCounts = action.payload.provinceCounts;
+      })
+      .addCase(fetchProvinceData.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.error.message || 'An error occurred';
+      });
+  }
 });
 
 export const { setDates, resetDates } = dateSlice.actions;

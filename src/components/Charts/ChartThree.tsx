@@ -1,100 +1,30 @@
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import type { ApexOptions } from "apexcharts";
-
-interface Province {
-  id: number;
-  streetAddress: string;
-  propertyId: number;
-  cityId: number;
-  stateId: number;
-}
-
-interface ProvinceData {
-  province: Province[];
-}
-
-interface ProvinceCount {
-  [key: string]: number;
-}
-
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchProvinceData } from "@/lib/redux/reducer/dateSlice";
+import { AppDispatch } from "@/lib/redux/store";
+const ChartThree: React.FC = () => {
 const provinceNames: { [key: number]: string } = {
+  
   1: "Sindh",
-  2: "Punjab",
-  3: "Balochistan",
-  4: "KPK",
+  2: "Punjab", 
+  3: "Balochistan", 
+  4: "KPK", 
   5: "Gilgit-Baltistan"
 };
 
 const provinceColors = ["#228B22", "#32CD32", "#66CDAA", "#ADFF2F", "#90EE90"];
 
-const ChartThree: React.FC = () => {
-  const [data, setData] = useState<ProvinceData | null>(null);
-  const [provinceCounts, setProvinceCounts] = useState<ProvinceCount>({});
-  const [series, setSeries] = useState<number[]>([]);
-  const [labels, setLabels] = useState<string[]>([]);
-  const [date, setDate] = useState([{ startDate: "", endDate: "" }]);
-
-  const getDefaultDateRange = (): { startDate: string; endDate: string } => {
-    const now = new Date();
-    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
-    
-    const startDate = firstDay.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
-    const endDate = now.toLocaleDateString("en-US", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-
-    return { startDate, endDate };
-  };
+  const dispatch: AppDispatch = useDispatch();
+  const { startMonth, startYear, provinceCounts, status, error } = useSelector((state: { date: { startMonth: number, startYear: number, provinceCounts: { [key: string]: number }, status: string, error: string } }) => state.date);
 
   useEffect(() => {
-    setDate([getDefaultDateRange()]);
-  }, []); // Runs only once when the component mounts
-
-  useEffect(() => {
-    console.log(date, "date =================================="); // This will log the updated date state
-  }, [date]); // Logs whenever date state updates
-
-  useEffect(() => {
-    
-    const fetchData = async () => {
-
-
-
-      try {
-        const response = await fetch(`/api/provinces?month=0&year=2025`);
-        if (!response.ok) {
-          throw new Error('Error Response');
-        }
-        const result = await response.json();
-        setData(result);
-        
-        // Process the data to count provinces
-        const counts: ProvinceCount = {};
-        result.province.forEach((item: Province) => {
-          const provinceName = provinceNames[item.stateId] || `Unknown (${item.stateId})`;
-          counts[provinceName] = (counts[provinceName] || 0) + 1;
-        });
-        
-        setProvinceCounts(counts);
-        
-        // Update series and labels
-        const provinceEntries = Object.entries(counts);
-        setSeries(provinceEntries.map(([_, count]) => count));
-        setLabels(provinceEntries.map(([name]) => name));
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-    fetchData();
-  }, []);
+    dispatch(fetchProvinceData({ 
+      month: startMonth || 0, 
+      year: startYear || 2025 
+    }));
+  }, [dispatch, startMonth, startYear]);
 
   const options: ApexOptions = {
     chart: {
@@ -102,7 +32,7 @@ const ChartThree: React.FC = () => {
       type: "donut",
     },
     colors: provinceColors,
-    labels: labels,
+    labels: Object.keys(provinceCounts),
     legend: {
       show: false,
       position: "bottom",
@@ -139,9 +69,12 @@ const ChartThree: React.FC = () => {
   };
 
   const calculatePercentage = (count: number): string => {
-    const total = series.reduce((acc, curr) => acc + curr, 0);
-    return ((count / total) * 100).toFixed(1);
+    const total = Object.values(provinceCounts).reduce((acc: number, curr: number) => acc + curr, 0);
+    return total > 0 ? ((count / total) * 100).toFixed(1) : "0";
   };
+
+  if (status === 'loading') return <div>Loading...</div>;
+  if (status === 'failed') return <div>Error: {error}</div>;
 
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pb-5 pt-7.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-5">
@@ -187,14 +120,14 @@ const ChartThree: React.FC = () => {
         <div id="chartThree" className="mx-auto flex justify-center">
           <ReactApexChart 
             options={options} 
-            series={series} 
+            series={Object.values(provinceCounts)} 
             type="donut" 
           />
         </div>
       </div>
 
       <div className="-mx-8 flex flex-wrap items-center justify-center gap-y-3">
-        {labels.map((label, index) => (
+        {Object.entries(provinceCounts).map(([label, count], index) => (
           <div key={label} className="w-full px-8 sm:w-1/2">
             <div className="flex w-full items-center">
               <span 
@@ -203,7 +136,7 @@ const ChartThree: React.FC = () => {
               ></span>
               <p className="flex w-full justify-between text-sm font-medium text-black dark:text-white">
                 <span>{label}</span>
-                <span>{calculatePercentage(series[index])}%</span>
+                <span>{calculatePercentage(count)}%</span>
               </p>
             </div>
           </div>
@@ -212,5 +145,4 @@ const ChartThree: React.FC = () => {
     </div>
   );
 };
-
 export default ChartThree;
