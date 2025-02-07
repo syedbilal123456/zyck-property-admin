@@ -18,6 +18,7 @@ export async function GET(request : Request){
                 contact :true,
                 createdAt: true,
                 description: true,
+                StatusProperty: true,
                 id: true,
                 images: true,
                 location: {

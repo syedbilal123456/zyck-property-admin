@@ -42,6 +42,7 @@ interface Location {
 }
 
 interface UserProperty {
+  StatusProperty : string
   contact: Contact
   createdAt: string
   description: string
@@ -141,6 +142,8 @@ if ( userProepertyArray.length === 0) {
     return <div className="text-center text-green-500 py-8">No found.</div>
   }
 
+  console.log(userProperties)
+
   return (
     <div className="w-full rounded-lg shadow-lg overflow-hidden">
       <div className="overflow-x-auto">
@@ -152,6 +155,7 @@ if ( userProepertyArray.length === 0) {
               <th className="p-4 text-left">Price</th>
               <th className="p-4 text-left">Contact</th>
               <th className="p-4 text-left">Description</th>
+              <th className="p-4 text-left">Status</th>
               <th className="p-4 text-left">Listed Date</th>
               <th className="p-4 text-left">Actions</th>
             </tr>
@@ -185,6 +189,7 @@ if ( userProepertyArray.length === 0) {
                     onClick={() => toggleDescription(property.id)}
                   />
                 </td>
+                <td className="font-medium text-green-200">{property.StatusProperty}</td>
                 <td className="p-4 text-green-200">{formatDate(property.createdAt)}</td>
                 <td className="gap-3 p-4 text-green-200">
                   <button onClick={() => deletePropertybyId(property.id)}>

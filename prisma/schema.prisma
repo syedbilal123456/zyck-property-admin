@@ -29,23 +29,24 @@ model User {
 }
 
 model Property {
-  id          Int                @id @default(autoincrement())
-  name        String
-  description String
-  price       Int
-  userId      String
-  typeId      Int
-  statusId    Int
-  DetailId    Int
-  createdAt   DateTime           @default(now())
-  contact     Contact?
-  typeDetail  PropertyTypeDetail @relation(fields: [DetailId], references: [id])
-  status      PropertyStatus     @relation(fields: [statusId], references: [id])
-  type        PropertyType       @relation(fields: [typeId], references: [id])
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  feature     PropertyFeature?
-  images      PropertyImage[]
-  location    PropertyLocation?
+  id             Int                @id @default(autoincrement())
+  name           String
+  description    String
+  price          Int
+  userId         String
+  typeId         Int
+  statusId       Int
+  DetailId       Int
+  createdAt      DateTime           @default(now())
+  StatusProperty StatusProperty     @default(ACCEPTED)
+  contact        Contact?
+  typeDetail     PropertyTypeDetail @relation(fields: [DetailId], references: [id])
+  status         PropertyStatus     @relation(fields: [statusId], references: [id])
+  type           PropertyType       @relation(fields: [typeId], references: [id])
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feature        PropertyFeature?
+  images         PropertyImage[]
+  location       PropertyLocation?
 }
 
 model Contact {
@@ -162,4 +163,10 @@ enum AreaType {
   SQUARE_YARD
   MARLA
   KANAL
+}
+
+enum StatusProperty {
+  PENDING
+  ACCEPTED
+  REJECTED
 }

@@ -131,6 +131,8 @@ const TableOne = () => {
 
       const result = await response.json()
 
+      console.log(result)
+
       if (!result) {
         throw new Error('No properties data in response')
       }
@@ -162,7 +164,6 @@ const TableOne = () => {
     }, 300)
   }
 
-  console.log(selectedUser)
 
   return (
     <div className="rounded-sm border border-stroke bg-white px-5 pb-2.5 pt-6 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 w-full">
