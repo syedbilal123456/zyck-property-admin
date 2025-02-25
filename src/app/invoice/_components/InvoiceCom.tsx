@@ -307,7 +307,7 @@ export default function ZyckInvoice({ users }: InvoiceFormProps) {
             <div className="flex justify-between items-start">
               <div>
                 <h2 className="text-xl font-bold text-green-600 dark:text-green-400">Zyckproperty.com</h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Pakistan's Premium Property Marketplace</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Pakistans Premium Property Marketplace</p>
               </div>
               <div className="text-right">
                 <p className="font-medium dark:text-white">Invoice No.: {invoiceData.invoiceNumber}</p>
@@ -319,7 +319,7 @@ export default function ZyckInvoice({ users }: InvoiceFormProps) {
               <p className="text-lg dark:text-white">Dear {invoiceData.customerName || "[Customer Name]"},</p>
 
               <p className="dark:text-gray-300">
-                Thank you for listing your property on Zyckproperty.com – Pakistan's Premium Property Marketplace!
+                Thank you for listing your property on Zyckproperty.com – Pakistans Premium Property Marketplace!
               </p>
 
               <p className="dark:text-gray-300">
