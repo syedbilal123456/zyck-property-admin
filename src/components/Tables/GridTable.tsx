@@ -1,6 +1,6 @@
 "use client"
 
-import { PencilIcon, Trash2 } from "lucide-react"
+import { Link, PencilIcon, Trash2 } from "lucide-react"
 import Image from "next/image"
 import type React from "react"
 import { useState } from "react"
@@ -42,7 +42,7 @@ interface Location {
 }
 
 interface UserProperty {
-  StatusProperty : string
+  StatusProperty: string
   contact: Contact
   createdAt: string
   description: string
@@ -135,10 +135,10 @@ const PropertyTable: React.FC<PropertyTableProps> = ({ userProperties = [] }) =>
   const userProepertyArray = Object.values(userProperties)
 
   if (!Array.isArray(userProepertyArray)) {
-  return <div className="text-center text-green-500 py-8">No properties found.</div>
- }
+    return <div className="text-center text-green-500 py-8">No properties found.</div>
+  }
 
-if ( userProepertyArray.length === 0) {
+  if (userProepertyArray.length === 0) {
     return <div className="text-center text-green-500 py-8">No found.</div>
   }
 
@@ -156,6 +156,7 @@ if ( userProepertyArray.length === 0) {
               <th className="p-4 text-left">Contact</th>
               <th className="p-4 text-left">Description</th>
               <th className="p-4 text-left">Status</th>
+              <th className="p-4 text-left">URL</th>
               <th className="p-4 text-left">Listed Date</th>
               <th className="p-4 text-left">Actions</th>
             </tr>
@@ -190,6 +191,14 @@ if ( userProepertyArray.length === 0) {
                   />
                 </td>
                 <td className="font-medium text-green-200">{property.StatusProperty}</td>
+                <td className="p-4 text-green-200">
+                  <button
+                    onClick={() => window.open(`https://www.zyckproperty.com/properties/buy/${property.id}`, "_blank")}
+                    className="px-4 py-2  text-green-500 rounded transition-colors"
+                  >
+                    <Link/>
+                  </button>
+                </td>
                 <td className="p-4 text-green-200">{formatDate(property.createdAt)}</td>
                 <td className="gap-3 p-4 text-green-200">
                   <button onClick={() => deletePropertybyId(property.id)}>

@@ -9,6 +9,7 @@ import PropertyTable from "./GridTable"
 import ActiveInactiveBtn from "./tableCompount/ActiveInactiveBTN"
 
 interface Property {
+  StatusProperty: string
   contact: {
     id: number
     name: string
@@ -48,7 +49,7 @@ interface User {
   firstName: string
   lastName: string
   email: string
-  isActive:boolean;
+  isActive: boolean;
   avatarUrl: string | null
   createdAt: string
   isAdmin: boolean
@@ -71,6 +72,7 @@ const TableOne = () => {
   const [selectedUser, setSelectedUser] = useState<User | null>(null)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [seeMore, setSeeMore] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const date = useSelector((state: RootState) => state.date)
@@ -151,9 +153,6 @@ const TableOne = () => {
     }
   }
 
-   const activeInactiveProfile = ()=>{
-
-   }
 
   const closeModal = () => {
     setIsModalOpen(false)
@@ -170,9 +169,12 @@ const TableOne = () => {
       <h4 className="mb-6 text-xl font-semibold text-black dark:text-white">All Users</h4>
 
       <div className="flex flex-col">
-        <div className="grid grid-cols-1 sm:grid-cols-8 rounded-sm bg-gray-2 dark:bg-meta-4">
+        <div className="grid grid-cols-1 sm:grid-cols-9 rounded-sm bg-gray-2 dark:bg-meta-4">
           <div className="p-2.5 text-center">
             <h5 className="text-base font-medium uppercase xsm:text-base">Name</h5>
+          </div>
+          <div className="p-2.5 text-center">
+            <h5 className="text-base font-medium uppercase xsm:text-base">Id</h5>
           </div>
           <div className="p-2.5 text-center">
             <h5 className="text-base font-medium uppercase xsm:text-base">City</h5>
@@ -199,14 +201,20 @@ const TableOne = () => {
 
         {data.allUsers.map((item, index) => (
           <div
-            className={`grid grid-cols-1 sm:grid-cols-8 ${index === data.allUsers.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"}`}
+            className={`grid grid-cols-1 sm:grid-cols-9 ${index === data.allUsers.length - 1 ? "" : "border-b border-stroke dark:border-strokedark"}`}
             key={item.id}
           >
             <div className="flex items-center gap-3 justify-start p-2.5 xl:p-5">
-              <div className="w-1/3">
+              {/* <div className="">
                 <Image alt={item.firstName} src={item.avatarUrl ?? "/default-avatar.png"} width={300} height={400}/>
-              </div>
+              </div> */}
               <p className="text-green-500 text-sm dark:text-green-400">{item.firstName + " " + item.lastName}</p>
+            </div>
+            <div className="flex flex-col items-center justify-center p-1.5 xl:p-5">
+              <p className="text-green-500 text-sm dark:text-green-400 truncate w-[150px] overflow-hidden">
+                {seeMore ? item.id : item.id.slice(0, 10) + "..."}
+              </p>
+              <button onClick={() => setSeeMore(prev => !prev)}>See More</button>
             </div>
             <div className="flex items-center justify-center p-1.5 xl:p-5">
               <p className="text-green-500 text-sm dark:text-green-400">{item.city}</p>
@@ -221,7 +229,7 @@ const TableOne = () => {
               <p className="text-green-500 text-sm dark:text-green-400">{item.phoneNumber}</p>
             </div>
             <div className="flex items-center justify-center p-1.5 xl:p-5">
-            <ActiveInactiveBtn user={item} />
+              <ActiveInactiveBtn user={item} />
             </div>
             <div className="hidden items-center justify-center p-1.5 sm:flex xl:p-5">
               <p className="text-green-500 text-sm dark:text-green-400">{item.streetAddress}</p>
@@ -243,7 +251,7 @@ const TableOne = () => {
                 >
                   <Pencil className="h-5 w-5 text-green-500" />
                 </button>
-               
+
                 <button
                   className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-full transition-colors"
                   onClick={() => deleteUser(item.id)}

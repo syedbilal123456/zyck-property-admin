@@ -17,15 +17,27 @@ model User {
   isAdmin         Boolean         @default(false)
   ProfileComplete Boolean         @default(false)
   city            String?
-  latitude        String?
-  longitude       String?
   province        String?
   streetAddress   String?
   phoneNumber     String?
   isActive        Boolean         @default(true)
   password        String?
+  latitude        Float?
+  longitude       Float?
   Property        Property[]
+  Sales           Sales[]
   subscription    Subscriptions[]
+}
+
+model Sales {
+  id            Int           @id @default(autoincrement())
+  userId        String
+  invoiceNo     String        @unique
+  createdAt     DateTime      @default(now())
+  PaymentAmount Decimal       @db.Decimal(10, 2)
+  PaymentGender PaymentGender
+  PaymentMethod PaymentMethod
+  user          User          @relation(fields: [userId], references: [id])
 }
 
 model Property {
@@ -155,6 +167,18 @@ model Subscriptions {
   userId    String
   plan      SubscriptionPlan @relation(fields: [planId], references: [id])
   user      User             @relation(fields: [userId], references: [id])
+}
+
+enum PaymentGender {
+  Direct_Client
+  Real_Estate_Agent
+  Property_Owner
+  Builder_Developer
+}
+
+enum PaymentMethod {
+  JazzCash
+  Bank_Transfer
 }
 
 enum AreaType {

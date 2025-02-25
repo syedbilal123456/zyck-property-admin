@@ -51,9 +51,7 @@ const ECommerce: React.FC = () => {
   }, [date])
 
   const { listings, users } = data || { listings: 0, users: 0 };
-  console.log("listings ===============>",listings)
-  // console.log("usersDetails ===============>", usersDetails)
-  console.log("users ===============>",users)
+
   if (!data) return <div>Loading...</div>;
 
   return (

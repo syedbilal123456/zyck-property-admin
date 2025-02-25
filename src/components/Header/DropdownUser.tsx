@@ -12,7 +12,6 @@ const DropdownUser = () => {
     return <div>Not authenticated</div>; // Handle unauthenticated users
   }
 
-  console.log("=========================>",session.user.image)
   return (
     <ClickOutside onClick={() => setDropdownOpen(false)} className="relative">
       <Link
