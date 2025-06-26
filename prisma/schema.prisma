@@ -22,22 +22,11 @@ model User {
   phoneNumber     String?
   isActive        Boolean         @default(true)
   password        String?
-  latitude        Float?
-  longitude       Float?
+  latitude        String?
+  longitude       String?
   Property        Property[]
-  Sales           Sales[]
   subscription    Subscriptions[]
-}
-
-model Sales {
-  id            Int           @id @default(autoincrement())
-  userId        String
-  invoiceNo     String        @unique
-  createdAt     DateTime      @default(now())
-  PaymentAmount Decimal       @db.Decimal(10, 2)
-  PaymentGender PaymentGender
-  PaymentMethod PaymentMethod
-  user          User          @relation(fields: [userId], references: [id])
+  Sales           sales[]
 }
 
 model Property {
@@ -59,6 +48,7 @@ model Property {
   feature        PropertyFeature?
   images         PropertyImage[]
   location       PropertyLocation?
+  sales          sales[]            @relation("PropertyToSales")
 }
 
 model Contact {
@@ -129,6 +119,7 @@ model PropertyType {
   created  DateTime             @default(now())
   Property Property[]
   Details  PropertyTypeDetail[]
+  Agency   Agency[]             @relation("AgencyToPropertyType")
 }
 
 model PropertyTypeDetail {
@@ -169,16 +160,125 @@ model Subscriptions {
   user      User             @relation(fields: [userId], references: [id])
 }
 
-enum PaymentGender {
-  Direct_Client
-  Real_Estate_Agent
-  Property_Owner
-  Builder_Developer
+model Agency {
+  id                  String             @id
+  name                String
+  logo                String?
+  tagline             String?
+  establishedYear     Int
+  agencyType          String
+  officeAddress       String
+  phoneNumber         String
+  email               String             @unique
+  website             String?
+  socialMedia         Json?
+  registrationNumber  String?
+  license             String?
+  areasCovered        String[]
+  totalAgents         Int
+  servicesOffered     ServiceType[]
+  totalListings       Int
+  exclusive           Boolean
+  listingLink         String?
+  testimonials        String[]
+  overallRating       Float              @default(0.0)
+  responseTime        String
+  businessCertificate String?
+  verificationStatus  VerificationStatus @default(PENDING)
+  PropertyType        PropertyType[]     @relation("AgencyToPropertyType")
 }
 
-enum PaymentMethod {
-  JazzCash
-  Bank_Transfer
+model Agent {
+  id                 String             @id
+  fullName           String
+  profilePicture     String?
+  agentType          String
+  experience         String
+  specialization     Specialization[]
+  phoneNumber        String
+  email              String             @unique
+  officeAddress      String?
+  agencyName         String?
+  agencyLogo         String?
+  agencyRegNumber    String?
+  areasCovered       String[]
+  servicesOffered    ServiceType[]
+  totalListings      Int
+  listingLink        String?
+  testimonials       String[]
+  overallRating      Float              @default(0.0)
+  responseTime       String
+  cnicVerification   Boolean            @default(false)
+  licenseCertificate String?
+  approvalStatus     VerificationStatus @default(PENDING)
+  SocialMediaLinks   SocialMediaLinks?
+}
+
+model AuthorizedAgent {
+  id        String  @id
+  projectId String
+  email     String
+  phone     String
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model PriceRange {
+  id        String  @id
+  projectId String  @unique
+  minPrice  Float
+  maxPrice  Float
+  Project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Project {
+  id                  String            @id
+  name                String
+  developerName       String
+  projectType         ProjectType
+  projectStatus       ProjectStatus
+  launchDate          DateTime
+  expectedCompletion  DateTime?
+  city                String
+  area                String
+  googleMapsLink      String?
+  nearbyLandmarks     String
+  availableUnits      PropertyUnit[]
+  sizesAndLayouts     String
+  paymentPlan         PaymentPlan
+  basicAmenities      String[]
+  luxuryFeatures      String[]
+  nearbyFacilities    String[]
+  masterPlan          String?
+  rendersAndPlans     String[]
+  siteImagesVideos    String[]
+  governmentApprovals String[]
+  registrationDetails String?
+  developerPhone      String
+  bookingProcedure    String
+  AuthorizedAgent     AuthorizedAgent[]
+  PriceRange          PriceRange?
+}
+
+model SocialMediaLinks {
+  id        String  @id
+  agentId   String  @unique
+  facebook  String?
+  instagram String?
+  linkedin  String?
+  Agent     Agent   @relation(fields: [agentId], references: [id])
+}
+
+model sales {
+  id            String     @id @default(uuid())
+  invoiceNo     String     @unique
+  PropertyTitle String
+  PaymentAmount Int
+  PaymentMethod String
+  PaymentGender String
+  userId        String
+  createdAt     DateTime   @default(now())
+  user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Property      Property[] @relation("PropertyToSales")
 }
 
 enum AreaType {
@@ -193,4 +293,70 @@ enum StatusProperty {
   PENDING
   ACCEPTED
   REJECTED
+}
+
+enum PaymentPlan {
+  INSTALLMENTS
+  FULL_PAYMENT
+}
+
+enum ProjectStatus {
+  ONGOING
+  COMPLETED
+  UPCOMING
+}
+
+enum ProjectType {
+  RESIDENTIAL
+  COMMERCIAL
+  MIXED_USE
+}
+
+enum PropertyCategory {
+  HOUSES
+  APARTMENTS
+  COMMERCIAL
+  PLOTS
+  PROJECTS
+}
+
+enum PropertyUnit {
+  APARTMENTS
+  VILLAS
+  SHOPS
+  OFFICES
+  PLOTS
+}
+
+enum ServiceType {
+  BUY_SELL
+  RENTAL
+  INVESTMENT
+  MARKETING
+}
+
+enum Specialization {
+  RESIDENTIAL
+  COMMERCIAL
+  PLOTS
+  PROJECTS
+}
+
+enum VerificationStatus {
+  VERIFIED
+  PENDING
+}
+
+enum PaymentGender {
+  DIRECT_CLIENTS
+  AGENCIES
+  AGENT
+  PROJECT
+}
+
+// Define PaymentMethod manually if not exported by @prisma/client
+enum PaymentMethod {
+  JAZZ_CASH
+  CREDIT_CARD
+  BANK_TRANSFER
 }

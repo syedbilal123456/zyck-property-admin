@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
+    "@lit-labs/react": "^2.1.3",
     "@react-google-maps/api": "^2.20.5",
     "@reduxjs/toolkit": "^2.5.0",
+    "apex-grid": "^1.0.1",
     "apexcharts": "^4.3.0",
     "flatpickr": "^4.6.13",
     "jspdf": "^2.5.2",
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "@prisma/client": "^6.4.1",
+    "@types/axios": "^0.9.36",
     "@types/leaflet": "^1.9.16",
     "@types/node": "^20",
     "@types/react": "^18",

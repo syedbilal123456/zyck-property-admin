@@ -1,9 +1,14 @@
-import { withAuth } from "next-auth/middleware"
+import { withAuth } from "next-auth/middleware";
 
 export default withAuth({
-  // Matches the pages config in `[...nextauth]`
   pages: {
     signIn: "/signin",
     error: "/error",
   },
-})
+});
+
+// 🔹 Exclude API routes from authentication checks
+export const config = {
+  matcher: ["/((?!api/).*)"], // This applies middleware to everything EXCEPT `/api/`
+};
+// 🔹 Exclude API routes from authentication checks

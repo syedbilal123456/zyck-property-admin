@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import DefaultLayout from "@/components/Layouts/DefaultLayout";
 import Invoice from "@/app/invoice/_components";
-import { prisma } from "@/lib/prisma";
 
 export const metadata: Metadata = {
   title: "Admin Invoice Generator | Zyck Property Dashboard",

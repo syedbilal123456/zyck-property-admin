@@ -83,6 +83,21 @@ const menuGroups = [
         label: "Invoice Generation",
         route: "/invoice",
       },
+      {
+        icon: (
+          <svg fill="#fafafa" width="24" height="24" version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 296.605 296.605" xmlnsXlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 296.605 296.605" stroke="#fafafa"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g>
+             <polygon points="71.999,157.105 84.982,214.105 257.982,214.105 270.885,157.105 "></polygon> 
+          <polygon points="278.128,125.105 291.482,66.105 84.715,66.105 73.983,19.968 15.842,0 5.123,31.211 45.981,45.243 64.556,125.105 "></polygon>
+           <circle cx="117.982" cy="264.105" r="32.5"></circle>
+           <circle cx="224.982" cy="264.105" r="32.5">
+          </circle>
+          </g>
+          </g>
+          </svg>
+        ),
+        label: "Sales",
+        route: "/sales",
+      },
     ]
   },
 

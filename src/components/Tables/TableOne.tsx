@@ -1,7 +1,6 @@
 "use client"
 import type { RootState } from "@/lib/redux/store"
 import { Eye, Home, Pencil, Trash2, UserPen } from "lucide-react"
-import Image from "next/image"
 import { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { toast } from "react-toastify"

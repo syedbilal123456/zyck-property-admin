@@ -1,6 +1,5 @@
 'use client'
 import store from '@/lib/redux/store'
-import { useRef } from 'react'
 import { Provider } from 'react-redux'
 
 export default function StoreProvider({

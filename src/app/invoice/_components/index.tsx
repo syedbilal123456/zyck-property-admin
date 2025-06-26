@@ -11,23 +11,10 @@ export default async function Invoice() {
       firstName: true,
       lastName: true,
       email: true,
-      Sales: {
-        select: {
-          PaymentGender: true,
-          PaymentMethod: true,
-        },
-        // Limit to the most recent sale for each user
-        orderBy: {
-          createdAt: 'desc',
-        },
-        take: 1,
-      },
     },
   })
 
   // Extract unique PaymentGender and PaymentMethod values
-  const paymentGenders = Array.from(new Set(users.flatMap(user => user.Sales.map(sale => sale.PaymentGender))))
-  const paymentMethods = Array.from(new Set(users.flatMap(user => user.Sales.map(sale => sale.PaymentMethod))))
 
   return (
     <div className="mx-auto max-w-7xl">
@@ -35,8 +22,6 @@ export default async function Invoice() {
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <ZyckInvoice 
           users={users} 
-          paymentGenders={paymentGenders} 
-          paymentMethods={paymentMethods}
         />
       </div>
     </div>
